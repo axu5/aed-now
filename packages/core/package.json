@@ -1,19 +1,24 @@
 {
-  "name": "@monorepo-template/core",
+  "name": "@aed-now/core",
   "version": "0.0.0",
-  "scripts": {
-    "test": "sst shell vitest"
-  },
+  "type": "module",
+  "sideEffects": false,
   "exports": {
-    "./*": [
-      "./src/*/index.ts",
-      "./src/*.ts"
-    ]
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "db": "sst shell drizzle-kit",
+    "db:studio": "sst shell drizzle-kit studio",
+    "populate": "sst shell tsx ./src/aed/populate.ts"
   },
   "dependencies": {
-    "sst": "*"
+    "@aws-sdk/client-rds-data": "^3.659.0",
+    "drizzle-kit": "^0.24.2",
+    "drizzle-orm": "^0.33.0",
+    "sst": "^3.1.51",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "vitest": "^2.0.3"
+    "tsx": "^4.19.1"
   }
 }

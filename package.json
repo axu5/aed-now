@@ -1,15 +1,20 @@
 {
-  "name": "monorepo-template",
+  "name": "aed-now",
   "version": "0.0.0",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "sst dev",
+    "sso": "aws sso login --sso-session=axu"
+  },
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {},
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
+    "@types/aws-lambda": "8.10.145",
     "typescript": "5.6.2"
   },
   "dependencies": {
-    "sst": "^3"
+    "sst": "3.1.49"
   }
 }
