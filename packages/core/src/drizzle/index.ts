@@ -1,13 +1,15 @@
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
 import { Resource } from "sst";
-import { drizzle } from "drizzle-orm/aws-data-api/pg";
-import { RDSDataClient } from "@aws-sdk/client-rds-data";
 
-const client = new RDSDataClient({
-  region: "eu-central-1",
+const migrationClient = postgres(Resource.Database.connectionString, {
+  max: 1,
+});
+migrate(drizzle(migrationClient), {
+  migrationsFolder: "../../migrations",
 });
 
-export const db = drizzle(client, {
-  database: Resource.Database.database,
-  secretArn: Resource.Database.secretArn,
-  resourceArn: Resource.Database.clusterArn,
-});
+const queryClient = postgres(Resource.Database.connectionString);
+
+export const db = drizzle(queryClient);

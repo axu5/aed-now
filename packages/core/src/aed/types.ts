@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { aed } from "./aed.sql";
 
 const AEDLocationSchema = z.object({
   address: z.string(),
@@ -80,24 +82,7 @@ const AEDDisclaimersSchema = z
   .or(z.string().max(0));
 export type AEDDisclaimers = z.infer<typeof AEDDisclaimersSchema>;
 
-export const AEDDataSchema = z.object({
-  id: z.number(),
-  location: AEDLocationSchema,
-  location_type: z.string(),
-  availabilityRules: AEDAvailabilityRulesSchema,
-  availabilityDetails: z.string(),
-  slug: z.string(),
-  title: z.string(),
-  created: AEDDateFormatWithTimeSchema,
-  modified: AEDDateFormatWithTimeSchema,
-  userEmail: z.string(),
-  userName: z.string(),
-  address: z.string(),
-  postalCode: z.string(),
-  city: z.string(),
-  contactPerson: z.string(),
-  phoneNumber: z.string(),
-  addressDetails: z.string(),
-  disclaimers: AEDDisclaimersSchema,
-});
-export type AEDData = z.infer<typeof AEDDataSchema>;
+export const AEDInsertSchema = createInsertSchema(aed);
+export type AEDInsert = z.infer<typeof AEDInsertSchema>;
+export const AEDSelectSchema = createSelectSchema(aed);
+export type AEDSelect = z.infer<typeof AEDSelectSchema>;

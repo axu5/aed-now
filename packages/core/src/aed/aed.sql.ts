@@ -4,6 +4,7 @@ import {
   json,
   pgTable,
   text,
+  timestamp,
 } from "drizzle-orm/pg-core";
 import {
   AEDAvailabilityRules,
@@ -34,4 +35,6 @@ export const aed = pgTable("aed", {
   phoneNumber: text("phoneNumber"),
   addressDetails: text("addressDetails"),
   disclaimers: json("disclaimers").$type<AEDDisclaimers>(),
+
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
 });

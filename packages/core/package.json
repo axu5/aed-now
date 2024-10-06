@@ -8,17 +8,14 @@
   },
   "scripts": {
     "db": "sst shell drizzle-kit",
-    "db:studio": "sst shell drizzle-kit studio",
-    "populate": "sst shell tsx ./src/aed/populate.ts"
+    "db:studio": "sst shell drizzle-kit studio"
   },
   "dependencies": {
-    "@aws-sdk/client-rds-data": "^3.659.0",
     "drizzle-kit": "^0.24.2",
     "drizzle-orm": "^0.33.0",
+    "drizzle-zod": "^0.5.1",
+    "postgres": "^3.4.4",
     "sst": "^3.1.51",
     "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "tsx": "^4.19.1"
   }
 }
