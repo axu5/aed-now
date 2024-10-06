@@ -5,8 +5,7 @@
     "jsx": "react-jsx",
     "moduleResolution": "bundler",
     "noUncheckedIndexedAccess": true,
-    "strict": true,
-    "strictNullChecks": true
+    "strict": true
   },
   "exclude": ["node_modules"]
 }

@@ -23,6 +23,15 @@ export type AEDDateFormatWithTime =
 const AEDTimeFormatSchema = z.string().regex(/^[0-9]{2}:[0-9]{2}$/);
 type AEDTimeFormat = `${number}:${number}`;
 
+export const weekdays = [
+  "Sunday" as const,
+  "Monday" as const,
+  "Tuesday" as const,
+  "Wednesday" as const,
+  "Thursday" as const,
+  "Friday" as const,
+  "Saturday" as const,
+] as const;
 export const AEDAvailabilityRulesSchema = z.array(
   z.union([
     z.object({
@@ -30,13 +39,13 @@ export const AEDAvailabilityRulesSchema = z.array(
       available: z.boolean(),
       days: z.array(
         z.union([
-          z.literal("Monday"),
-          z.literal("Tuesday"),
-          z.literal("Wednesday"),
-          z.literal("Thursday"),
-          z.literal("Friday"),
-          z.literal("Saturday"),
-          z.literal("Sunday"),
+          z.literal(weekdays[0]),
+          z.literal(weekdays[1]),
+          z.literal(weekdays[2]),
+          z.literal(weekdays[3]),
+          z.literal(weekdays[4]),
+          z.literal(weekdays[5]),
+          z.literal(weekdays[6]),
         ])
       ),
       from: AEDTimeFormatSchema,
@@ -82,7 +91,12 @@ const AEDDisclaimersSchema = z
   .or(z.string().max(0));
 export type AEDDisclaimers = z.infer<typeof AEDDisclaimersSchema>;
 
-export const AEDInsertSchema = createInsertSchema(aed);
+const overwrites = {
+  availabilityRules: AEDAvailabilityRulesSchema,
+  disclaimers: AEDDisclaimersSchema,
+};
+
+export const AEDInsertSchema = createInsertSchema(aed, overwrites);
 export type AEDInsert = z.infer<typeof AEDInsertSchema>;
-export const AEDSelectSchema = createSelectSchema(aed);
+export const AEDSelectSchema = createSelectSchema(aed, overwrites);
 export type AEDSelect = z.infer<typeof AEDSelectSchema>;

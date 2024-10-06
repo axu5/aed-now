@@ -5,5 +5,41 @@ import "sst"
 export {}
 declare module "sst" {
   export interface Resource {
+    "AEDNowSite": {
+      "type": "sst.aws.Nextjs"
+      "url": string
+    }
+    "DBIPAddress": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "DBName": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "DBPassword": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "DBPort": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "DBUserName": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "Database": {
+      "connectionString": string
+      "type": "sst.sst.Linkable"
+    }
+    "InstructionBucket": {
+      "name": string
+      "type": "sst.aws.Bucket"
+    }
+    "MapboxAccessToken": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
   }
 }

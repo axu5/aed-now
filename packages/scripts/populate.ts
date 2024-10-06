@@ -1,15 +1,18 @@
 import { readFileSync } from "fs";
-import { db } from "../drizzle/index";
-import { aed, AEDData, AEDDataSchema } from "./aed.sql";
+import { db } from "@aed-now/core/drizzle/index";
+import { aed } from "@aed-now/core/aed/aed.sql";
+import { AEDInsert, AEDInsertSchema } from "@aed-now/core/aed/types";
 
 async function main() {
-  const file = readFileSync("");
+  const file = readFileSync("./data/de.fi.json");
   const data = JSON.parse(file.toString());
-  const res: AEDData[] = new Array(data.length);
+  const res: AEDInsert[] = new Array(data.length);
   let successes = 0;
   let errors = 0;
   for (const dataPoint of data) {
-    const result = AEDDataSchema.safeParse(dataPoint);
+    dataPoint.lat = dataPoint.location.lat;
+    dataPoint.lng = dataPoint.location.lng;
+    const result = AEDInsertSchema.safeParse(dataPoint);
     if (!result.success) {
       console.log(dataPoint);
       console.error(result.error);

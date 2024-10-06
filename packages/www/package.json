@@ -13,6 +13,8 @@
     "@aed-now/core": "workspace:",
     "@aws-sdk/client-s3": "^3.662.0",
     "@aws-sdk/s3-request-presigner": "^3.662.0",
+    "@uidotdev/usehooks": "^2.4.1",
+    "date-fns": "^4.1.0",
     "drizzle-orm": "^0.33.0",
     "mapbox-gl": "^3.7.0",
     "next": "14.2.13",

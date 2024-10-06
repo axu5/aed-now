@@ -14,13 +14,13 @@ import {
 
 export const aed = pgTable("aed", {
   id: integer("id").primaryKey(),
-  location: json("location").$type<AEDLocation>(),
+  location: json("location").$type<AEDLocation>().notNull(),
   lat: doublePrecision("lat").notNull(),
   lng: doublePrecision("lng").notNull(),
   location_type: text("location_type").notNull(),
-  availabilityRules: json(
-    "availabilityRules"
-  ).$type<AEDAvailabilityRules>(),
+  availabilityRules: json("availabilityRules")
+    .$type<AEDAvailabilityRules>()
+    .notNull(),
   availabilityDetails: text("availabilityDetails").notNull(),
   slug: text("slug").notNull(),
   title: text("title").notNull(),
@@ -34,7 +34,7 @@ export const aed = pgTable("aed", {
   contactPerson: text("contactPerson").notNull(),
   phoneNumber: text("phoneNumber").notNull(),
   addressDetails: text("addressDetails").notNull(),
-  disclaimers: json("disclaimers").$type<AEDDisclaimers>(),
+  disclaimers: json("disclaimers").$type<AEDDisclaimers>().notNull(),
 
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 });

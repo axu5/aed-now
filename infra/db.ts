@@ -1,12 +1,23 @@
-export const vpc = new sst.aws.Vpc("VPC");
-export const rds = new sst.aws.Postgres("Database", { vpc });
+import { secret } from "./secret";
 
-// export const api = new sst.aws.Function("MyApi", {
-//   url: true,
-//   link: [rds],
-//   handler: "packages/core/src/drizzle/api.handler",
-// });
+// The database is hosted on an OVH VPS
+// It's using the latest version of postgresql
+const dbDetails = {
+  password: secret.DBPassword.value,
+  username: secret.DBUserName.value,
+  host: secret.DBIPAddress.value,
+  port: secret.DBPort.value,
+  name: secret.DBName.value,
+};
 
-// export const outputs = {
-//   api: api.url,
-// };
+const connectionString = $interpolate`postgres://${dbDetails.username}:${dbDetails.password}@${dbDetails.host}:${dbDetails.port}/${dbDetails.name}`;
+
+export const db = new sst.Linkable("Database", {
+  properties: {
+    connectionString,
+  },
+});
+
+export const outputs = {
+  db: dbDetails.host,
+};

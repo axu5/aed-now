@@ -1,15 +1,23 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
-import { Resource } from "sst";
+import { connectionURL } from "../../drizzle.config";
 
-const migrationClient = postgres(Resource.Database.connectionString, {
-  max: 1,
-});
-migrate(drizzle(migrationClient), {
-  migrationsFolder: "../../migrations",
-});
+async function handleMigrations() {
+  const migrationClient = postgres(connectionURL.toString(), {
+    max: 1,
+    // ssl: "require",
+  });
+  await migrate(drizzle(migrationClient), {
+    migrationsFolder:
+      "/Users/Axu/code/aed-now/packages/core/migrations",
+  });
+}
 
-const queryClient = postgres(Resource.Database.connectionString);
+handleMigrations();
+
+const queryClient = postgres(connectionURL.toString(), {
+  // ssl: "require",
+});
 
 export const db = drizzle(queryClient);

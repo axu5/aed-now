@@ -5,6 +5,10 @@ import "sst"
 export {}
 declare module "sst" {
   export interface Resource {
+    "AEDNowSite": {
+      "type": "sst.aws.Nextjs"
+      "url": string
+    }
     "DBIPAddress": {
       "type": "sst.sst.Secret"
       "value": string
