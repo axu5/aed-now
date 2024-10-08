@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  AEDAvailabilityRules,
-  AEDSelect,
-  weekdays,
-} from "@aed-now/core/aed/types";
+import { isAEDAvailable } from "@/helpers/isAvailable";
+import { AEDSelect } from "@aed-now/core/aed/types";
 import { useGeolocation } from "@uidotdev/usehooks";
-import { getDay, isAfter, isBefore, isToday } from "date-fns";
 import { useEffect, useState } from "react";
 import ReactMapGL, { Marker } from "react-map-gl";
 
@@ -22,43 +18,9 @@ type MapProps = {
   points: AEDSelect[];
 };
 
-function getFormattedTime(time: Date | number) {
-  time = new Date(time);
-  const hours = String(time.getHours()).padStart(2, "0");
-  const minutes = String(time.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
-}
-
-function parseHHMM(str: string) {
-  const [h, m] = str.split(":");
-  const hours = parseInt(h as string);
-  const minutes = parseInt(m as string);
-  if (isNaN(hours) || isNaN(minutes)) {
-    return null;
-  }
-  return {
-    hours,
-    minutes,
-  };
-}
-
-function isBeforeHours(a: string, b: string) {
-  const aParsed = parseHHMM(a);
-  const bParsed = parseHHMM(b);
-  if (!aParsed || !bParsed) {
-    return false;
-  }
-
-  if (aParsed.hours == bParsed.hours) {
-    return aParsed.minutes < bParsed.minutes;
-  }
-
-  return aParsed.hours < bParsed.hours;
-}
-
 const IS_SERVER = typeof window === undefined;
 
-export function Map({ mapboxAccessToken, points }: MapProps) {
+export function Map({ mapboxAccessToken, points: aeds }: MapProps) {
   const [userCoords, setUserCoords] = useState<Position | undefined>(
     IS_SERVER
       ? undefined
@@ -124,58 +86,13 @@ export function Map({ mapboxAccessToken, points }: MapProps) {
         }}
         mapStyle='mapbox://styles/audacious5/cm1nq5rfd00ms01r2bv738g1b'
         mapboxAccessToken={mapboxAccessToken}>
-        {points.map(point => {
-          let isAvailable = false;
-          const now = Date.now();
-          for (let i = 0; i < point.availabilityRules.length; i++) {
-            const cur = point.availabilityRules[
-              i
-            ] as AEDAvailabilityRules[number];
-            const { type, from, to, available } = cur;
-
-            if (type === "date") {
-              const { date } = cur;
-              if (from != "" && to == "" && isAfter(now, from)) {
-                isAvailable = available;
-                continue;
-              }
-              if (from == "" && to != "" && isBefore(now, to)) {
-                isAvailable = available;
-                continue;
-              }
-              if (isToday(date)) {
-                isAvailable = available;
-                continue;
-              }
-            } else if (type === "range") {
-              if (
-                from != "" &&
-                to != "" &&
-                isAfter(now, from) &&
-                isBefore(now, to)
-              ) {
-                isAvailable = available;
-              }
-            } else {
-              const { days } = cur;
-              const dayIdx = getDay(now);
-              const day = weekdays[dayIdx];
-              const stringTimeNow = getFormattedTime(now);
-              if (
-                day !== undefined &&
-                days.includes(day) &&
-                !isBeforeHours(stringTimeNow, from) &&
-                isBeforeHours(stringTimeNow, to)
-              ) {
-                isAvailable = available;
-              }
-            }
-          }
+        {aeds.map(aed => {
+          const isAvailable = isAEDAvailable(aed);
           return (
             <Marker
-              key={point.id}
-              latitude={point.lat}
-              longitude={point.lng}
+              key={aed.id}
+              latitude={aed.lat}
+              longitude={aed.lng}
               color={isAvailable ? "#ff0000" : "#cccccc"}></Marker>
           );
         })}
